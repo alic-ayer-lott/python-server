@@ -29,8 +29,8 @@ def get_all_animals():
 
 # Function with a single parameter
 def get_single_animal(id):
-    # Variable to hold the found animal, if it exists
-    requested_animal = None
+    # Variable to hold the found animal, if it exists; like "let"
+    requested_animal = None #need an initial value in Python; did not in JavaScript
 
     # Iterate the ANIMALS list above. Very similar to the
     # for..of loops you used in JavaScript.
