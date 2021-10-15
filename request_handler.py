@@ -23,21 +23,21 @@ class HandleRequests(BaseHTTPRequestHandler): #inheriting here
         # path is "/animals/1", the resulting list will
         # have "" at index 0, "animals" at index 1, and "1"
         # at index 2.
-        path_params = path.split("/")
-        resource = path_params[1]
-        id = None
+        path_params = path.split("/") #defining path_params to return a list
+        resource = path_params[1] #grabbing item at number 1 index
+        id = None 
 
         # Try to get the item at index 2
         try:
             # Convert the string "1" to the integer 1
             # This is the new parseInt()
             id = int(path_params[2])
-        except IndexError:
+        except IndexError: #just keep going
             pass  # No route parameter exists: /animals
         except ValueError:
             pass  # Request had trailing slash: /animals/
 
-        return (resource, id)  # This is a tuple
+        return (resource, id)  # This is a tuple; we are packing tuple here
 
     # Here's a class function
     def _set_headers(self, status):
@@ -112,13 +112,13 @@ class HandleRequests(BaseHTTPRequestHandler): #inheriting here
     def do_POST(self):
         self._set_headers(201)
         content_len = int(self.headers.get('content-length', 0))
-        post_body = self.rfile.read(content_len)
+        post_body = self.rfile.read(content_len) # post-body = what is sent to header that we are trying to post to API; reading with rfile.read
 
         # Convert JSON string to a Python dictionary
-        post_body = json.loads(post_body)
+        post_body = json.loads(post_body) 
 
         # Parse the URL
-        (resource, id) = self.parse_url(self.path)
+        (resource, id) = self.parse_url(self.path) #grabbing the tuple and unpacking
 
         # Initialize new animal
         new_dict = None
