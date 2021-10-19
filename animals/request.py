@@ -1,5 +1,6 @@
 import sqlite3
 import json
+import animals
 from models import Animal
 
 
@@ -147,3 +148,29 @@ def update_animal(id, new_animal):
             ANIMALS[index] = new_animal
             break
 
+
+def get_animals_by_location(location_id):
+    with sqlite3.connect("./kennel.db") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        select
+            c.id,
+            c.name,
+            c.breed,
+            c.status,
+            c.location_id,
+            c.customer_id
+        from Animal c
+        WHERE c.location_id = ?
+        """, (location_id,))
+
+        animals = []
+        dataset = db_cursor.fetchall()
+
+        for row in dataset:
+            animal = Animal(row['id'], row['name'], row['breed'], row['status'], row['location_id'], row['customer_id'])
+            animals.append(animal.__dict__)
+    
+    return json.dumps(animals)
