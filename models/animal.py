@@ -11,5 +11,5 @@ class Animal():
         self.location_id = location_id
         self.customer_id = customer_id
 
-animal1 = Animal(1, 'Jack', 'husky', 'napping', 1, 2)
-print(animal1.name)
+# animal1 = Animal(1, 'Jack', 'husky', 'napping', 1, 2)
+# print(animal1.name)
