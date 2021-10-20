@@ -1,7 +1,7 @@
 import sqlite3
 import json
 import animals
-from models import Animal, Location
+from models import Animal, Location, Customer
 
 
 ANIMALS = [
@@ -34,11 +34,12 @@ ANIMALS = [
 
 def get_all_animals():
     # Open a connection to the database
-    with sqlite3.connect("./kennel.db") as conn:
+    with sqlite3.connect("./kennel.db") as conn: #this returns a connection
 
         # Just use these. It's a Black Box.
+        #must run cursor before you can execute
         conn.row_factory = sqlite3.Row
-        db_cursor = conn.cursor()
+        db_cursor = conn.cursor() #creates an environment to execute the code
 
         # Write the SQL query to get the information you want
         db_cursor.execute("""
@@ -50,10 +51,16 @@ def get_all_animals():
             a.location_id,
             a.customer_id,
             l.name location_name,
-            l.address location_address
+            l.address location_address,
+            c.name customer_name,
+            c.address customer_address,
+            c.email customer_email,
+            c.password customer_password
         FROM Animal a
         JOIN Location l
             ON l.id = a.location_id
+        JOIN Customer c
+            ON c.id = a.customer_id
         """)
 
         # Initialize an empty list to hold all animal representations
@@ -66,15 +73,21 @@ def get_all_animals():
         for row in dataset:
 
             # Create an animal instance from the current row.
-            # Note that the database fields are specified in
-            # exact order of the parameters defined in the
-            # Animal class above.
             animal = Animal(row['id'], row['name'], row['breed'],
                             row['status'], row['location_id'],
                             row['customer_id'])
+            
+            # Create a Location instance for the current row
             location = Location(row['location_id'], row['location_name'], row['location_address'])
-            animal.location = location.__dict__   
-            animals.append(animal.__dict__)
+
+            customer = Customer(row['customer_id'], row['customer_name'], row['customer_address'], row['customer_email'], row['customer_password'])
+            
+            #Add the dictionary representation of the location to the animal
+            animal.location = location.__dict__ #adding location to animal as a new property
+            animal.customer = customer.__dict__
+            
+            # Add the dictrionary representation of the animal to the list
+            animals.append(animal.__dict__) #making into a dictionary as appending
 
     # Use `json` package to properly serialize list as JSON
     return json.dumps(animals)
