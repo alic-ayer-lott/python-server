@@ -95,6 +95,16 @@ class HandleRequests(BaseHTTPRequestHandler): #inheriting here
                     response = f"{get_single_animal(id)}"
                 else:
                     response = f"{get_all_animals()}"
+            if resource == "employees":
+                if id is not None:
+                    response = f"{get_single_employee(id)}"
+                else:
+                    response = f"{get_all_employees()}"
+            if resource == "locations":
+                if id is not None:
+                    response = f"{get_single_location(id)}"
+                else:
+                    response = f"{get_all_locations()}"
             elif resource == "customers":
                 if id is not None:
                     response = f"{get_single_customer(id)}"
